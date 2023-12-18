@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSC Coin</title>
+</head>
+<body>
+    <div style="text-align: center">
+        <h1>BSC Coin</h1>
+        <h3>기회는 3번!!</h3>
+        보유 금액 <span id="balance" style="margin-bottom: 5px"></span><br />
+        남은 횟수 <span id="remainingTries" style="margin-bottom: 5px">3</span><br />
+        <input
+            id="input"
+            type="number"
+            placeholder="돈을 걸어주세요"
+            min="1"
+            max="3000"
+        />
+        <button id="btn">coin flip</button>
+
+        <h3>{{ msg }}</h3>
+
+        <br />
+        <p style="margin-top: 10px">flag는 50000원 이상이면 구매 가능합니다.</p>
+        <button id="postButton">Flag 구매하기</button>
+    </div>
+
+    <script>
+        let money = 3000;
+        let tryp = document.getElementById("remainingTries");
+        const input = document.getElementById("input");
+        const btn = document.getElementById("btn");
+        const flagBtn = document.getElementById("postButton");
+        let balance = document.getElementById("balance");
+        let coinFlipTry = 0;
+        balance.innerText = money;
+
+        const handleBtnClick = () => {
+            if (input.value <= Number(balance.innerText) && input.value > 0) {
+                if (coinFlipTry < 3) {
+                    const frontBack = Math.floor(Math.random() * 2);
+                    coinFlipTry += 1;
+                    if (frontBack) {
+                        money -= input.value;
+                        money += input.value * 2;
+                        balance.innerText = money;
+                        alert("승리! ₩" + input.value * 2);
+                    } else {
+                        money -= input.value;
+                        balance.innerText = money;
+                        alert("패배 - ₩" + input.value);
+                    }
+                    tryp.innerText = 3 - coinFlipTry;
+                } else {
+                    alert("기회가 없습니다...");
+                }
+            } else {
+                alert("돈 똑바로 입력해라잉ㅋㅋ");
+            }
+        };
+
+        btn.addEventListener("click", handleBtnClick);
+
+        const handleFlagBtnClick = async () => {
+            const getmoney = money;
+
+            const res = await fetch("/", {
+                method: "POST",
+                body: JSON.stringify({ money: getmoney }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            // 서버로부터 응답을 받아서 처리할 코드 추가 (예: 성공/실패 메시지 출력 등)
+        };
+
+        flagBtn.addEventListener("click", handleFlagBtnClick);
+    </script>
+</body>
+</html>
