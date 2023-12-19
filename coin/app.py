@@ -3,7 +3,7 @@ from flask import *
 app = Flask(__name__, template_folder='templates')
 
 flag = "2023GSM{_Th1S_S1t3'S_FE_w@S_m@D3_by_G@0n_}"
-
+    
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
